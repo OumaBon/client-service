@@ -25,13 +25,13 @@ export default function LoginPage() {
   }
 
   return (
-    <form onSubmit={handleLogin}>
+    <form onSubmit={handleLogin} className='space-y-4 max-w-md mx-auto mt-10'>
       <div>
         <label>Email:</label>
         <input
           type="email"
           value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          onChange={(e) => setEmail(e.target.value)}className="border p-2 w-full rounded"
           required
         />
       </div>
@@ -41,12 +41,11 @@ export default function LoginPage() {
         <input
           type="password"
           value={password}
-          onChange={(e) => setPassword(e.target.value)}
+          onChange={(e) => setPassword(e.target.value)} className="border p-2 w-full rounded"
           required
         />
       </div>
-
-      <button type="submit">Login</button>
+      <button type="submit" className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Login</button>
     </form>
   )
 }
