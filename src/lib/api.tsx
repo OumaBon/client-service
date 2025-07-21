@@ -1,69 +1,74 @@
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL
 
-type User ={
-    id: number;
+
+export interface LoginRequest {
     email: string;
-    username: string;
+    password: string;
 };
 
-type LoginResponse = {
+
+export interface LoginResponse{
+    message: string;
     access_token: string;
     refresh_token: string;
-    user: User;
 };
 
 
-type LoginPayload = {
-    email: string;
-    password: string;
-
-};
-
-type RegisterPayload = {
-    username: string;
-    email: string;
-    password: string;
-};
-
-
-type RegisterResponse = {
-  message: string;
-  user: User;
-};
-
-
-
-export const loginUser = async (payload: LoginPayload): Promise<LoginResponse> =>{
-    const res = await fetch(`${API_URL}/login`, {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify(payload)
-    });
-
-    if (!res.ok){
-        const errorData = await res.json();
-        throw new Error(errorData.message || 'Failed to Login user')
-    }
-
-    return res.json() as Promise<LoginResponse>;
+export interface LoginError {
+    errors?: {[key: string]: string[]};
+    error?: string;
 }
 
 
 
-export const registerUser = async (payload: RegisterPayload): Promise<RegisterResponse> =>{
-    const res = await fetch(`${API_URL}/register`, {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
+
+export const loginUser = async(payload: LoginRequest): Promise<LoginResponse> =>{
+    const res = await fetch(`${API_URL}/login`, {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
         body: JSON.stringify(payload)
     });
+
+    const data = await res.json();
+    if (!res.ok) throw data as LoginError;
+    return data as LoginResponse;
+
+}
+
+
+
+
+// export const loginUser = async (payload: LoginPayload): Promise<LoginResponse> =>{
+//     const res = await fetch(`${API_URL}/login`, {
+//         method: 'POST',
+//         headers: {'Content-Type': 'application/json'},
+//         body: JSON.stringify(payload)
+//     });
+
+//     if (!res.ok){
+//         const errorData = await res.json();
+//         throw new Error(errorData.message || 'Failed to Login user')
+//     }
+
+//     return res.json() as Promise<LoginResponse>;
+// }
+
+
+
+// export const registerUser = async (payload: RegisterPayload): Promise<RegisterResponse> =>{
+//     const res = await fetch(`${API_URL}/register`, {
+//         method: 'POST',
+//         headers: {'Content-Type': 'application/json'},
+//         body: JSON.stringify(payload)
+//     });
     
-    if (!res.ok){
-        const errorData = await res.json();
-        throw new Error(errorData.message || "Failed to register user");
-    }
-    return res.json() as Promise<RegisterResponse>;
-};
+//     if (!res.ok){
+//         const errorData = await res.json();
+//         throw new Error(errorData.message || "Failed to register user");
+//     }
+//     return res.json() as Promise<RegisterResponse>;
+// };
 
 
 
